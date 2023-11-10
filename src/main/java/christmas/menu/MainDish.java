@@ -1,4 +1,4 @@
-package christmas.entity;
+package christmas.menu;
 
 public enum MainDish implements Dish {
     T_BONE_STEAK("티본스테이크", 55000),

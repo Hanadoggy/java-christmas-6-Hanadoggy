@@ -1,4 +1,4 @@
-package christmas.entity;
+package christmas.menu;
 
 public interface Dish {
     public String getType();

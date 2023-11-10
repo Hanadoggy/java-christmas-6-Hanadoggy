@@ -1,15 +1,14 @@
-package christmas.entity;
+package christmas.menu;
 
-public enum Beverage implements Dish {
-    ZERO_COKE("제로콜라", 3000),
-    RED_WINE("레드와인", 60000),
-    CHAMPAGNE("샴페인", 25000);
+public enum Dessert implements Dish {
+    CHOCOLATE_CAKE("초코케이크",15000),
+    ICE_CREAM("아이스크림", 5000);
 
-    private static final String type = "음료";
+    private static final String type = "디저트";
     private final String name;
     private final int price;
 
-    Beverage(String name, int price) {
+    Dessert(String name, int price) {
         this.name = name;
         this.price = price;
     }

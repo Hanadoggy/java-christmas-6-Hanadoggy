@@ -1,24 +1,48 @@
 package christmas.service;
 
+import christmas.common.Range;
+import christmas.entity.Appetizer;
+import christmas.entity.Dish;
+import christmas.entity.MainDish;
+import christmas.entity.OrderStatement;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.*;
 
 class ChristmasDDayPromotionServiceTest {
-    ChristmasDDayPromotionService service = new ChristmasDDayPromotionService();
-    OrderStatementStub receipt = new OrderStatementStub();
+    ChristmasDDayPromotionService service;
+    OrderStatementStub receipt;
+
+    public ChristmasDDayPromotionServiceTest() {
+        service = new ChristmasDDayPromotionService();
+        receipt = new OrderStatementStub();
+    }
+
+    @BeforeEach
+    void cleanUp() {
+        receipt.setReservationDay(24);
+        receipt.setReturnPrice(Range.MIN_PRICE.getValue());
+    }
 
     @ValueSource(ints = {1,2,10,20,24,25})
     @ParameterizedTest
     void 날짜적용_성공_1일부터_25일까지(int today) {
-        assertThat(service.support(today)).isTrue();
+        receipt.setReservationDay(today);
+
+        assertThat(service.support(receipt)).isTrue();
     }
 
     @ValueSource(ints = {0,26,27,30,31,40})
     @ParameterizedTest
     void 날짜적용_실패_범위초과(int today) {
-        assertThat(service.support(today)).isFalse();
+        receipt.setReservationDay(today);
+
+        assertThat(service.support(receipt)).isFalse();
     }
 
     @ValueSource(ints = {10000, 12000, 240000})
@@ -40,7 +64,8 @@ class ChristmasDDayPromotionServiceTest {
     @ValueSource(ints = {1,6,11,25})
     @ParameterizedTest
     void 할인적용_성공(int today) {
-        service.support(today);
+        receipt.setReservationDay(today);
+        service.support(receipt);
         int result = 1000 + (100 * (today - 1));
 
         assertThat(service.discount(receipt))

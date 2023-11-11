@@ -1,5 +1,7 @@
 package christmas.service;
 
+import christmas.common.Range;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -10,16 +12,26 @@ class SpecialPromotionServiceTest {
     SpecialPromotionService service = new SpecialPromotionService();
     OrderStatementStub receipt = new OrderStatementStub();
 
+    @BeforeEach
+    void cleanUpBasicSuccess() {
+        receipt.setReservationDay(25);
+        receipt.setReturnPrice(Range.MIN_PRICE.getValue());
+    }
+
     @ValueSource(ints = {3,10,24,25,31})
     @ParameterizedTest
     void 날짜적용_성공_일요일과_크리스마스(int today) {
-        assertThat(service.support(today)).isTrue();
+        receipt.setReservationDay(today);
+
+        assertThat(service.support(receipt)).isTrue();
     }
 
     @ValueSource(ints = {-10,0,2,4,32})
     @ParameterizedTest
     void 날짜적용_실패_범위초과(int today) {
-        assertThat(service.support(today)).isFalse();
+        receipt.setReservationDay(today);
+
+        assertThat(service.support(receipt)).isFalse();
     }
 
     @ValueSource(ints = {10000, 12000, 240000})

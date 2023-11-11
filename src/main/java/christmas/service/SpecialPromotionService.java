@@ -28,13 +28,9 @@ public class SpecialPromotionService implements PromotionService {
     }
 
     @Override
-    public boolean support(int day) {
-        return duration.contains(day);
-    }
-
-    @Override
     public boolean support(OrderStatement orderStatement) {
-        return (orderStatement.getOriginalPrice() >= Range.MIN_PRICE.getValue());
+        return duration.contains(orderStatement.getReservationDay()) &&
+                orderStatement.getOriginalPrice() >= Range.MIN_PRICE.getValue();
     }
 
     @Override

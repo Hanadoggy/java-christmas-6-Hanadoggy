@@ -33,13 +33,9 @@ public class WeekendPromotionService implements PromotionService {
     }
 
     @Override
-    public boolean support(int day) {
-        return duration.contains(day);
-    }
-
-    @Override
     public boolean support(OrderStatement orderStatement) {
-        if (orderStatement.getOriginalPrice() < Range.MIN_PRICE.getValue()) {
+        if (!duration.contains(orderStatement.getReservationDay()) ||
+                orderStatement.getOriginalPrice() < Range.MIN_PRICE.getValue()) {
             return false;
         }
         Set<Dish> orderedDishes = orderStatement.getOrderedDishes();

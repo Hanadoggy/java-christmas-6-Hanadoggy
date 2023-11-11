@@ -16,13 +16,8 @@ public class GiftPromotionService implements PromotionService {
     }
 
     @Override
-    public boolean support(int day) {
-        return true;
-    }
-
-    @Override
     public boolean support(OrderStatement orderStatement) {
-        return (orderStatement.getOriginalPrice() >= 120_000);
+        return orderStatement.getOriginalPrice() >= 120_000;
     }
 
     @Override
@@ -38,4 +33,5 @@ public class GiftPromotionService implements PromotionService {
     public String getPromotionName() {
         return promotionName;
     }
+
 }

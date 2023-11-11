@@ -32,7 +32,7 @@ class OrderStatementTest {
 
     @BeforeEach
     void cleanUpReceipt() {
-        orderStatement = new OrderStatement(basicDishes);
+        orderStatement = new OrderStatement(basicDishes, 1);
     }
 
     @Test
@@ -46,7 +46,7 @@ class OrderStatementTest {
 
     @Test
     void 주문이_없는_영수증_주문내역() {
-        OrderStatement testOrderStatement = new OrderStatement(new HashMap<>());
+        OrderStatement testOrderStatement = new OrderStatement(new HashMap<>(), 1);
         int result = 0;
 
         assertThat(testOrderStatement.getOrderedDishes())
@@ -73,10 +73,7 @@ class OrderStatementTest {
 
     @Test
     void 주문이있는_할인전_주문금액_확인_성공() {
-        int result = 0;
-        for (Dish dish : basicDishes.keySet()) {
-            result += basicDishes.get(dish) * dish.getPrice();
-        }
+        int result = 126_000;
 
         assertThat(orderStatement.getOriginalPrice())
                 .isEqualTo(result);
@@ -84,7 +81,7 @@ class OrderStatementTest {
 
     @Test
     void 주문이없는_할인전_주문금액_확인_0원() {
-        OrderStatement testOrderStatement = new OrderStatement(new HashMap<>());
+        OrderStatement testOrderStatement = new OrderStatement(new HashMap<>(), 1);
         int result = 0;
 
         assertThat(testOrderStatement.getOriginalPrice())

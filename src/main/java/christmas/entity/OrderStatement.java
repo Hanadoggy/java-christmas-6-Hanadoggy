@@ -5,29 +5,35 @@ import java.util.Map;
 import java.util.Set;
 
 public class OrderStatement {
-    private final Map<Dish, Integer> numberOfOrderedDishes;
-    private Map<Dish, Integer> promotionDishes;
-    private Map<String, Integer> promotionDetails;
+    private final Map<Dish, Integer> orderedDishes;
+    private final int reservationDay;
+    private final Map<Dish, Integer> promotionDishes;
+    private final Map<String, Integer> promotionDetails;
 
-    public OrderStatement(Map<Dish, Integer> numberOfOrderedDishes) {
-        this.numberOfOrderedDishes = numberOfOrderedDishes;
+    public OrderStatement(Map<Dish, Integer> orderedDishes, int reservationDay) {
+        this.orderedDishes = orderedDishes;
+        this.reservationDay = reservationDay;
         promotionDishes = new HashMap<>();
         promotionDetails = new HashMap<>();
     }
 
+    public int getReservationDay() {
+        return reservationDay;
+    }
+
     public Set<Dish> getOrderedDishes() {
-        return Set.copyOf(numberOfOrderedDishes.keySet());
+        return Set.copyOf(orderedDishes.keySet());
     }
 
     public int getNumberOfDish(Dish dish) {
-        return numberOfOrderedDishes.getOrDefault(dish, 0);
+        return orderedDishes.getOrDefault(dish, 0);
     }
 
     public int getOriginalPrice() {
         int originalPrice = 0;
 
-        for (Dish dish : numberOfOrderedDishes.keySet()) {
-            originalPrice += numberOfOrderedDishes.get(dish) * dish.getPrice();
+        for (Dish dish : orderedDishes.keySet()) {
+            originalPrice += orderedDishes.get(dish) * dish.getPrice();
         }
         return originalPrice;
     }

@@ -1,19 +1,56 @@
 package christmas.view;
 
 import camp.nextstep.edu.missionutils.Console;
+import christmas.controller.RestaurantValidator;
+import christmas.entity.Dish;
+
+import java.util.Map;
+
+import static christmas.common.Message.*;
 
 public class InputView {
+    private final RestaurantValidator validator;
 
-    public String getReservationDate() {
-        System.out.printf("%s\n%s\n",
-                "안녕하세요! 우테코 식당 12월 이벤트 플래너입니다.",
-                "12월 중 식당 예상 방문 날짜는 언제인가요? (숫자만 입력해주세요!)");
-        return Console.readLine();
+    public InputView() {
+        this.validator = new RestaurantValidator();
     }
 
-    public String getOrder() {
-        System.out.println("주문하실 메뉴를 메뉴와 개수를 알려 주세요. (e.g. 해산물파스타-2,레드와인-1,초코케이크-1)\n");
-        return Console.readLine();
+    public int getReservationDate() {
+        int inputDate = 0;
+
+        System.out.println(RESERVATION_DATE.getMessage());
+        while (inputDate == 0) {
+            inputDate = getValidatedDate(Console.readLine());
+        }
+        return inputDate;
+    }
+
+    public int getValidatedDate(String input) {
+        try {
+            return validator.convertReservationDate(input);
+        } catch (IllegalArgumentException e) {
+            System.out.println(ERROR_INVALID_DATE.getMessage());
+            return 0;
+        }
+    }
+
+    public Map<Dish, Integer> getOrder() {
+        Map<Dish, Integer> order = null;
+
+        System.out.println(RESERVATION_ORDER);
+        while (order == null) {
+            order = getValidatedOrder(Console.readLine());
+        }
+        return order;
+    }
+
+    private Map<Dish, Integer> getValidatedOrder(String input) {
+        try {
+            return validator.convertOrder(input);
+        } catch (IllegalArgumentException e) {
+            System.out.println(ERROR_INVALID_ORDER);
+            return null;
+        }
     }
 
 }

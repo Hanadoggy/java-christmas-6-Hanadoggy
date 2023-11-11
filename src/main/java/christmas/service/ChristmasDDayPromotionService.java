@@ -26,13 +26,11 @@ public class ChristmasDDayPromotionService implements PromotionService {
         int basicDiscount = 1_000;
         int addedDiscount = 100;
 
-        int totalDiscount = basicDiscount + addedDiscount * (orderStatement.getReservationDay() - 1);
-        orderStatement.addDiscount(promotionName, totalDiscount);
-        return totalDiscount;
+        return basicDiscount + addedDiscount * (orderStatement.getReservationDay() - 1);
     }
 
     @Override
-    public String getPromotionName() {
+    public String getName() {
         return promotionName;
     }
 

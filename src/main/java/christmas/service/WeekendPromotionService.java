@@ -55,14 +55,11 @@ public class WeekendPromotionService implements PromotionService {
         for (Dish targetDish : targetDishes) {
             totalDiscount += orderStatement.getNumberOf(targetDish) * basicDiscount;
         }
-        if (totalDiscount > 0) {
-            orderStatement.addDiscount(promotionName, totalDiscount);
-        }
         return totalDiscount;
     }
 
     @Override
-    public String getPromotionName() {
+    public String getName() {
         return promotionName;
     }
 }

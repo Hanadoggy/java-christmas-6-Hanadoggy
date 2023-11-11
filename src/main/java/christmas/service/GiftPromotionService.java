@@ -22,15 +22,11 @@ public class GiftPromotionService implements PromotionService {
 
     @Override
     public int discount(OrderStatement orderStatement) {
-        int totalDiscount = targetDish.getPrice() * targetNumber;
-
-        orderStatement.addDiscount(promotionName, totalDiscount);
-        orderStatement.addPromotionItem(targetDish, targetNumber);
-        return totalDiscount;
+        return targetDish.getPrice() * targetNumber;
     }
 
     @Override
-    public String getPromotionName() {
+    public String getName() {
         return promotionName;
     }
 

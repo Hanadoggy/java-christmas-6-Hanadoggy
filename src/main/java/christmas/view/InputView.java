@@ -37,7 +37,7 @@ public class InputView {
     public Map<Dish, Integer> getOrder() {
         Map<Dish, Integer> order = null;
 
-        System.out.println(RESERVATION_ORDER);
+        System.out.println(RESERVATION_ORDER.getMessage());
         while (order == null) {
             order = getValidatedOrder(Console.readLine());
         }
@@ -48,7 +48,7 @@ public class InputView {
         try {
             return validator.convertOrder(input);
         } catch (IllegalArgumentException e) {
-            System.out.println(ERROR_INVALID_ORDER);
+            System.out.println(ERROR_INVALID_ORDER.getMessage());
             return null;
         }
     }

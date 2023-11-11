@@ -1,7 +1,12 @@
 package christmas;
 
+import christmas.service.RestaurantStarter;
+
 public class Application {
+
     public static void main(String[] args) {
-        // TODO: 프로그램 구현
+        RestaurantStarter restaurantStarter = new RestaurantStarter();
+        restaurantStarter.run();
     }
+
 }

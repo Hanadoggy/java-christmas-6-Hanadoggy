@@ -35,14 +35,11 @@ public class SpecialPromotionService implements PromotionService {
 
     @Override
     public int discount(OrderStatement orderStatement) {
-        int basicDiscount = 1_000;
-
-        orderStatement.addDiscount(promotionName, basicDiscount);
-        return basicDiscount;
+        return 1_000;
     }
 
     @Override
-    public String getPromotionName() {
+    public String getName() {
         return promotionName;
     }
 }

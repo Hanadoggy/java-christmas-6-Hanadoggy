@@ -25,8 +25,24 @@ public class OrderStatement {
         return Set.copyOf(orderedDishes.keySet());
     }
 
-    public int getNumberOfDish(Dish dish) {
+    public int getNumberOf(Dish dish) {
         return orderedDishes.getOrDefault(dish, 0);
+    }
+
+    public Set<Dish> getPromotionDishes() {
+        return Set.copyOf(promotionDishes.keySet());
+    }
+
+    public int getNumberOfPromotion(Dish dish) {
+        return promotionDishes.getOrDefault(dish, 0);
+    }
+
+    public Set<String> getPromotionDetails() {
+        return Set.copyOf(promotionDetails.keySet());
+    }
+
+    public int getPriceOf(String promotion) {
+        return promotionDetails.getOrDefault(promotion, 0);
     }
 
     public int getOriginalPrice() {

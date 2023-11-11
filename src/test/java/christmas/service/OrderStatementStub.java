@@ -32,7 +32,7 @@ public class OrderStatementStub extends OrderStatement {
     }
 
     @Override
-    public int getNumberOfDish(Dish dish) {
+    public int getNumberOf(Dish dish) {
         return testOrderedDishes.getOrDefault(dish, 0);
     }
 

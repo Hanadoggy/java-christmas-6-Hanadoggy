@@ -58,7 +58,7 @@ class OrderStatementTest {
         MainDish input = MainDish.T_BONE_STEAK;
         int result = 1;
 
-        assertThat(orderStatement.getNumberOfDish(input))
+        assertThat(orderStatement.getNumberOf(input))
                 .isEqualTo(result);
     }
 
@@ -67,7 +67,7 @@ class OrderStatementTest {
         MainDish input = MainDish.BBQ_RIBS;
         int result = 0;
 
-        assertThat(orderStatement.getNumberOfDish(input))
+        assertThat(orderStatement.getNumberOf(input))
                 .isEqualTo(result);
     }
 

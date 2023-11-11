@@ -1,7 +1,7 @@
 package christmas.view;
 
 import camp.nextstep.edu.missionutils.Console;
-import christmas.controller.RestaurantValidator;
+import christmas.common.Message;
 import christmas.entity.Dish;
 
 import java.util.Map;
@@ -18,18 +18,18 @@ public class InputView {
     public int getReservationDate() {
         int inputDate = 0;
 
-        System.out.println(RESERVATION_DATE.getMessage());
+        printMessage(RESERVATION_DATE);
         while (inputDate == 0) {
-            inputDate = getValidatedDate(Console.readLine());
+            inputDate = checkDate(Console.readLine());
         }
         return inputDate;
     }
 
-    public int getValidatedDate(String input) {
+    private int checkDate(String input) {
         try {
             return validator.convertReservationDate(input);
         } catch (IllegalArgumentException e) {
-            System.out.println(ERROR_INVALID_DATE.getMessage());
+            printMessage(ERROR_INVALID_DATE);
             return 0;
         }
     }
@@ -37,20 +37,24 @@ public class InputView {
     public Map<Dish, Integer> getOrder() {
         Map<Dish, Integer> order = null;
 
-        System.out.println(RESERVATION_ORDER.getMessage());
+        printMessage(RESERVATION_ORDER);
         while (order == null) {
-            order = getValidatedOrder(Console.readLine());
+            order = checkOrder(Console.readLine());
         }
         return order;
     }
 
-    private Map<Dish, Integer> getValidatedOrder(String input) {
+    private Map<Dish, Integer> checkOrder(String input) {
         try {
             return validator.convertOrder(input);
         } catch (IllegalArgumentException e) {
-            System.out.println(ERROR_INVALID_ORDER.getMessage());
+            printMessage(ERROR_INVALID_ORDER);
             return null;
         }
+    }
+
+    private void printMessage(Message message) {
+        System.out.println(message.getMessage());
     }
 
 }

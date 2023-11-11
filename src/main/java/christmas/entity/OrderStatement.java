@@ -6,9 +6,9 @@ import java.util.Set;
 
 public class OrderStatement {
     private final Map<Dish, Integer> orderedDishes;
-    private final int reservationDay;
     private final Map<Dish, Integer> promotionDishes;
     private final Map<String, Integer> promotionDetails;
+    private final int reservationDay;
 
     public OrderStatement(Map<Dish, Integer> orderedDishes, int reservationDay) {
         this.orderedDishes = orderedDishes;
@@ -25,7 +25,7 @@ public class OrderStatement {
         return Set.copyOf(orderedDishes.keySet());
     }
 
-    public int getNumberOf(Dish dish) {
+    public int getNumber(Dish dish) {
         return orderedDishes.getOrDefault(dish, 0);
     }
 
@@ -41,7 +41,7 @@ public class OrderStatement {
         return Set.copyOf(promotionDetails.keySet());
     }
 
-    public int getPriceOf(String promotion) {
+    public int getPromotionPrice(String promotion) {
         return promotionDetails.getOrDefault(promotion, 0);
     }
 
@@ -55,23 +55,33 @@ public class OrderStatement {
     }
 
     public int getDiscountPrice() {
-        int discountPrice = 0;
+        int totalDiscount = 0;
+
+        for (int discount : promotionDetails.values()) {
+            totalDiscount += discount;
+        }
+        return totalDiscount;
+    }
+
+    public int getPurchasePrice() {
+        return getOriginalPrice() - getDiscountPrice() + getPromotionItemPrice();
+    }
+
+    public int getPromotionItemPrice() {
+        int promotionItemPrice = 0;
 
         for (Dish dish : promotionDishes.keySet()) {
-            discountPrice += promotionDishes.get(dish) * dish.getPrice();
+            promotionItemPrice += promotionDishes.get(dish) * dish.getPrice();
         }
-        for (String promotion : promotionDetails.keySet()) {
-            discountPrice += promotionDetails.get(promotion);
-        }
-        return discountPrice;
+        return promotionItemPrice;
     }
 
     public void addPromotionItem(Dish dish, int count) {
-        promotionDishes.put(dish, promotionDishes.getOrDefault(dish, 0) + count);
+        promotionDishes.put(dish, count);
     }
 
     public void addDiscount(String promotion, int discount) {
-        promotionDetails.put(promotion, promotionDetails.getOrDefault(promotion, 0) + discount);
+        promotionDetails.put(promotion, discount);
     }
 
 }

@@ -1,9 +1,9 @@
 package christmas.common;
 
 public enum EventBadge {
-    STAR(5000, "별"),
-    TREE(10000, "트리"),
-    SANTA(20000, "산타");
+    STAR(5_000, "별"),
+    TREE(10_000, "트리"),
+    SANTA(20_000, "산타");
 
     private final int price;
     private final String name;

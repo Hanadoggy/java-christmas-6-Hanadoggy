@@ -1,8 +1,8 @@
 package christmas.service;
 
-import christmas.entity.OrderStatement;
 import christmas.entity.Beverage;
 import christmas.entity.Dish;
+import christmas.entity.OrderStatement;
 
 public class GiftPromotionService implements PromotionService {
     private final String promotionName;
@@ -22,6 +22,7 @@ public class GiftPromotionService implements PromotionService {
 
     @Override
     public int discount(OrderStatement orderStatement) {
+        orderStatement.addPromotionItem(targetDish, targetNumber);
         return targetDish.getPrice() * targetNumber;
     }
 

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class OrderStatementTest {
     static Map<Dish, Integer> basicDishes = new HashMap<>();
@@ -58,7 +58,7 @@ class OrderStatementTest {
         MainDish input = MainDish.T_BONE_STEAK;
         int result = 1;
 
-        assertThat(orderStatement.getNumberOf(input))
+        assertThat(orderStatement.getNumber(input))
                 .isEqualTo(result);
     }
 
@@ -67,7 +67,7 @@ class OrderStatementTest {
         MainDish input = MainDish.BBQ_RIBS;
         int result = 0;
 
-        assertThat(orderStatement.getNumberOf(input))
+        assertThat(orderStatement.getNumber(input))
                 .isEqualTo(result);
     }
 

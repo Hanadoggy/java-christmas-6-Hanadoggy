@@ -1,9 +1,12 @@
-package christmas.controller;
+package christmas.view;
 
 import christmas.common.Range;
 import christmas.entity.*;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.PatternSyntaxException;
 
 public class RestaurantValidator {
@@ -11,17 +14,17 @@ public class RestaurantValidator {
 
     public RestaurantValidator() {
         allDishes = new HashMap<>();
-        init();
+        addAllDishes();
     }
 
-    private void init() {
-        addAllDishes(Appetizer.values());
-        addAllDishes(Beverage.values());
-        addAllDishes(Dessert.values());
-        addAllDishes(MainDish.values());
+    private void addAllDishes() {
+        addDishes(Appetizer.values());
+        addDishes(Beverage.values());
+        addDishes(Dessert.values());
+        addDishes(MainDish.values());
     }
 
-    private void addAllDishes(Dish[] dishes) {
+    private void addDishes(Dish[] dishes) {
         for (Dish dish : dishes) {
             allDishes.put(dish.getName(), dish);
         }
@@ -39,20 +42,19 @@ public class RestaurantValidator {
     public Map<Dish, Integer> convertOrder(String input) {
         try {
             Map<Dish, Integer> orders = getOrder(input.split(","));
-            checkMaxOrder(orders.values());
-            checkMinimumDish(orders.keySet());
+            checkCondition(orders);
             return orders;
         } catch (PatternSyntaxException e) {
             throw new IllegalArgumentException(e);
         }
     }
 
-    private Map<Dish, Integer> getOrder(String[] split) {
+    private Map<Dish, Integer> getOrder(String[] splitOrders) {
         try {
             Map<Dish, Integer> orders = new HashMap<>();
-            for (String word : split) {
-                String[] order = word.split("-");
-                orders.put(allDishes.get(order[0]), convertInteger(order[1]));
+            for (String order : splitOrders) {
+                String[] splitOrder = order.split("-");
+                orders.put(allDishes.get(splitOrder[0]), convertInteger(splitOrder[1]));
             }
             return orders;
         } catch (NullPointerException | IndexOutOfBoundsException e) {
@@ -60,23 +62,26 @@ public class RestaurantValidator {
         }
     }
 
-    private void checkMaxOrder(Collection<Integer> orderedDishesNumber) {
+    private void checkCondition(Map<Dish, Integer> orders) {
         int count = 0;
-        for (int number : orderedDishesNumber) {
+
+        for (int number : orders.values()) {
             count += number;
             if (count > Range.MAX_MENU.getValue()) {
                 throw new IllegalArgumentException();
             }
         }
+        checkMinimumDish(orders.keySet());
     }
 
     private void checkMinimumDish(Set<Dish> orderedDishes) {
         Set<Dish> copyOfAllDishes = new HashSet<>(allDishes.values());
+
         for (Dish dish : Beverage.values()) {
             copyOfAllDishes.remove(dish);
         }
-        for (Dish dish : copyOfAllDishes) {
-            if (orderedDishes.contains(dish)) {
+        for (Dish orderedDish : orderedDishes) {
+            if (copyOfAllDishes.contains(orderedDish)) {
                 return;
             }
         }
@@ -90,4 +95,5 @@ public class RestaurantValidator {
             throw new IllegalArgumentException(e);
         }
     }
+
 }

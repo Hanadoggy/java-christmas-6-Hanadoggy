@@ -1,9 +1,9 @@
 package christmas.service;
 
 import christmas.common.Range;
-import christmas.entity.OrderStatement;
 import christmas.entity.Dessert;
 import christmas.entity.Dish;
+import christmas.entity.OrderStatement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +25,7 @@ public class WeekdayPromotionService implements PromotionService {
         List<Integer> duration = new ArrayList<>();
 
         for (int i = 1; i <= 31; i++) {
-            if (i % 7 == 1 || i % 7 == 2) {
+            if (i % 7 == 0 || i % 7 > 2) {
                 duration.add(i);
             }
         }
@@ -53,7 +53,7 @@ public class WeekdayPromotionService implements PromotionService {
 
         int totalDiscount = 0;
         for (Dish dish : targetDishes) {
-            totalDiscount += orderStatement.getNumberOf(dish) * basicDiscount;
+            totalDiscount += orderStatement.getNumber(dish) * basicDiscount;
         }
         return totalDiscount;
     }

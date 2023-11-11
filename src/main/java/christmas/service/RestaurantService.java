@@ -13,7 +13,7 @@ public class RestaurantService {
         this.promotionsInProgress = promotionsInProgress;
     }
 
-    public OrderStatement performOrder(Map<Dish, Integer> order, int reservationDay) {
+    public OrderStatement performOrder(int reservationDay, Map<Dish, Integer> order) {
         OrderStatement orderStatement = new OrderStatement(order, reservationDay);
         applyPromotions(orderStatement);
         return orderStatement;

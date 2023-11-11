@@ -1,18 +1,11 @@
 package christmas.service;
 
 import christmas.common.Range;
-import christmas.entity.Appetizer;
-import christmas.entity.Dish;
-import christmas.entity.MainDish;
-import christmas.entity.OrderStatement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class ChristmasDDayPromotionServiceTest {
     ChristmasDDayPromotionService service;

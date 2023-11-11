@@ -1,31 +1,33 @@
 package christmas.controller;
 
-import christmas.entity.Dish;
 import christmas.entity.OrderStatement;
+import christmas.service.PromotionService;
+import christmas.service.RestaurantService;
 import christmas.view.InputView;
 import christmas.view.OutputView;
 
-import java.util.Map;
+import java.util.List;
 
 public class RestaurantController {
     private final InputView inputView;
     private final OutputView outputView;
+    private final RestaurantService restaurantService;
 
-    public RestaurantController() {
+    public RestaurantController(List<PromotionService> promotionsInProgress) {
         inputView = new InputView();
         outputView = new OutputView();
+        restaurantService = new RestaurantService(promotionsInProgress);
     }
 
-    public int getReservationDate() {
-        return inputView.getReservationDate();
+    public void acceptOrder() {
+        outputView.printOrderDetails(createOrderStatement());
     }
 
-    public Map<Dish, Integer> getOrder() {
-        return inputView.getOrder();
-    }
-
-    public void printResult(OrderStatement orderStatement) {
-        outputView.printOrderDetails(orderStatement);
+    private OrderStatement createOrderStatement() {
+        return restaurantService.performOrder(
+                inputView.getReservationDate(),
+                inputView.getOrder()
+        );
     }
 
 }

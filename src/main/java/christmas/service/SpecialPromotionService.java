@@ -1,7 +1,8 @@
 package christmas.service;
 
 import christmas.common.Range;
-import christmas.entity.OrderStatement;
+import christmas.entity.DiscountDetail;
+import christmas.entity.Order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,18 +29,15 @@ public class SpecialPromotionService implements PromotionService {
     }
 
     @Override
-    public boolean support(OrderStatement orderStatement) {
-        return duration.contains(orderStatement.getReservationDay()) &&
-                orderStatement.getOriginalPrice() >= Range.MIN_PRICE.getValue();
+    public boolean support(Order order) {
+        return duration.contains(order.getReservationDay()) &&
+                order.getTotalPrice() >= Range.MIN_PRICE.getValue();
     }
 
     @Override
-    public int discount(OrderStatement orderStatement) {
-        return 1_000;
+    public void apply(Order order, DiscountDetail discountDetail) {
+        int discount = 1_000;
+        discountDetail.addDetail(promotionName, discount);
     }
 
-    @Override
-    public String getName() {
-        return promotionName;
-    }
 }

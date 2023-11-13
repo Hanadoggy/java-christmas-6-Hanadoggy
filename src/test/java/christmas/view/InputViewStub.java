@@ -1,34 +1,36 @@
 package christmas.view;
 
-import camp.nextstep.edu.missionutils.Console;
 import christmas.common.Message;
 import christmas.common.RestaurantValidator;
 import christmas.dto.OrderDto;
 
-import static christmas.common.Message.*;
+import static christmas.common.Message.RESERVATION_DATE;
+import static christmas.common.Message.RESERVATION_ORDER;
 
-public class InputView {
+public class InputViewStub extends InputView {
+    public String input;
 
     public int readDate() {
         System.out.println(RESERVATION_DATE.getMessage());
         while (true) {
             try {
-                int date = convertInteger(Console.readLine());
+                int date = convertInteger(input);
                 RestaurantValidator.checkReservationDate(date);
                 return date;
             } catch (IllegalArgumentException e) {
-                System.out.println(ERROR_INVALID_DATE.getMessage());
+                throw new IllegalArgumentException();
             }
         }
     }
 
+    @Override
     public OrderDto readOrder(int reservationDate, Message message) {
         System.out.println(message.getMessage());
         while (true) {
             try {
-                return createOrderDto(reservationDate, Console.readLine());
+                return createOrderDto(reservationDate, input);
             } catch (IllegalArgumentException | NullPointerException | IndexOutOfBoundsException e) {
-                System.out.println(ERROR_INVALID_ORDER.getMessage());
+                throw new IllegalArgumentException();
             }
         }
     }

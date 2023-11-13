@@ -1,8 +1,9 @@
 package christmas.service;
 
 import christmas.entity.Beverage;
+import christmas.entity.DiscountDetail;
 import christmas.entity.Dish;
-import christmas.entity.OrderStatement;
+import christmas.entity.Order;
 
 public class GiftPromotionService implements PromotionService {
     private final String promotionName;
@@ -16,19 +17,15 @@ public class GiftPromotionService implements PromotionService {
     }
 
     @Override
-    public boolean support(OrderStatement orderStatement) {
-        return orderStatement.getOriginalPrice() >= 120_000;
+    public boolean support(Order order) {
+        return order.getTotalPrice() >= 120_000;
     }
 
     @Override
-    public int discount(OrderStatement orderStatement) {
-        orderStatement.addPromotionItem(targetDish, targetNumber);
-        return targetDish.getPrice() * targetNumber;
-    }
-
-    @Override
-    public String getName() {
-        return promotionName;
+    public void apply(Order order, DiscountDetail discountDetail) {
+        int discount = targetDish.getPrice() * targetNumber;
+        discountDetail.addGift(targetDish, targetNumber);
+        discountDetail.addDetail(promotionName, discount);
     }
 
 }

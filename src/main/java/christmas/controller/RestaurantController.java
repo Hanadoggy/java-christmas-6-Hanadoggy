@@ -1,6 +1,8 @@
 package christmas.controller;
 
-import christmas.entity.OrderStatement;
+import christmas.common.Message;
+import christmas.dto.OrderDto;
+import christmas.entity.Order;
 import christmas.service.PromotionService;
 import christmas.service.RestaurantService;
 import christmas.view.InputView;
@@ -20,14 +22,18 @@ public class RestaurantController {
     }
 
     public void acceptOrder() {
-        outputView.printOrderDetails(createOrderStatement());
-    }
+        int reservationDate = inputView.readDate();
+        OrderDto orderDto = inputView.readOrder(reservationDate);
+        Order order = null;
 
-    private OrderStatement createOrderStatement() {
-        return restaurantService.performOrder(
-                inputView.getReservationDate(),
-                inputView.getOrder()
-        );
+        while (order == null) {
+            try {
+                order = restaurantService.performOrder(orderDto);
+            } catch (IllegalArgumentException e) {
+                orderDto = inputView.readOrder(reservationDate, Message.ERROR_INVALID_ORDER);
+            }
+        }
+        outputView.printMenu(restaurantService.performOrder(orderDto));
     }
 
 }

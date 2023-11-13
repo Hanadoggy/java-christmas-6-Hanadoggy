@@ -1,29 +1,56 @@
 package christmas.service;
 
+import christmas.dto.OrderDto;
+import christmas.entity.DiscountDetail;
 import christmas.entity.Dish;
-import christmas.entity.OrderStatement;
+import christmas.entity.Order;
+import christmas.repository.RestaurantRepository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class RestaurantService {
     private final List<PromotionService> promotionsInProgress;
+    private final RestaurantRepository restaurantRepository;
 
     public RestaurantService(List<PromotionService> promotionsInProgress) {
         this.promotionsInProgress = promotionsInProgress;
+        restaurantRepository = new RestaurantRepository();
     }
 
-    public OrderStatement performOrder(int reservationDay, Map<Dish, Integer> order) {
-        OrderStatement orderStatement = new OrderStatement(order, reservationDay);
-        applyPromotions(orderStatement);
-        return orderStatement;
-    }
-
-    private void applyPromotions(OrderStatement order) {
+    public Order performOrder(OrderDto orderDto) {
+        Order order = createOrder(orderDto);
+        DiscountDetail discountDetail = new DiscountDetail();
         for (PromotionService promotion : promotionsInProgress) {
             if (promotion.support(order)) {
-                order.addDiscount(promotion.getName(), promotion.discount(order));
+                promotion.apply(order, discountDetail);
             }
+        }
+        order.applyDiscount(discountDetail);
+        return order;
+    }
+
+    private Order createOrder(OrderDto orderDto) {
+        Map<Dish, Integer> orderDishes = new HashMap<>();
+
+        for (String dishName : orderDto.getOrders()) {
+            orderDishes.put(restaurantRepository.findDish(dishName), orderDto.getNumber(dishName));
+        }
+        Order order = new Order(orderDto.getReservationDate(), orderDishes);
+        checkMinimumDish(order);
+        return order;
+    }
+
+    private void checkMinimumDish(Order order) {
+        Set<Dish> dishes = order.getDishes();
+
+        for (Dish dish : restaurantRepository.findUnessentialDishes()) {
+            dishes.remove(dish);
+        }
+        if (dishes.isEmpty()) {
+            throw new IllegalArgumentException();
         }
     }
 

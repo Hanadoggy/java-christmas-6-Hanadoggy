@@ -1,38 +1,50 @@
 package christmas.service;
 
-import christmas.entity.Beverage;
+import christmas.entity.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class GiftPromotionServiceTest {
     GiftPromotionService service = new GiftPromotionService();
-    OrderStatementStub receipt = new OrderStatementStub();
+    Map<Dish, Integer> dishes = new HashMap<>();
 
-    @ValueSource(ints = {120000, 240000})
-    @ParameterizedTest
-    void 조건적용_성공_최소금액도달(int price) {
-        receipt.setReturnPrice(price);
-
-        assertThat(service.support(receipt)).isTrue();
+    @BeforeEach
+    void cleanUp() {
+        dishes.clear();
     }
 
-    @ValueSource(ints = {0,-10,1200, 11999})
-    @ParameterizedTest
-    void 조건적용_실패_최소금액미만(int price) {
-        receipt.setReturnPrice(price);
+    @Test
+    void 조건적용_성공_최소금액도달() {
+        dishes.put(Appetizer.CAESAR_SALAD, 15);
+        Order order = new Order(1, dishes);
 
-        assertThat(service.support(receipt)).isFalse();
+        assertThat(service.support(order)).isTrue();
+    }
+
+    @Test
+    void 조건적용_실패_최소금액미만() {
+        dishes.put(MainDish.T_BONE_STEAK, 2);
+        dishes.put(Beverage.ZERO_COKE, 3);
+        Order order = new Order(1, dishes);
+
+        assertThat(service.support(order)).isFalse();
     }
 
     @Test
     void 할인적용_성공() {
+        dishes.put(Appetizer.CAESAR_SALAD, 15);
+        Order order = new Order(1, dishes);
+        DiscountDetail discountDetail = new DiscountDetail();
         int result = Beverage.CHAMPAGNE.getPrice();
 
-        assertThat(service.discount(receipt))
-                .isEqualTo(result);
+        service.apply(order, discountDetail);
+
+        assertThat(discountDetail.getTotalDiscount()).isEqualTo(result);
     }
 
 }

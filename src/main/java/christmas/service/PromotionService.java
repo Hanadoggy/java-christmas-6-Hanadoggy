@@ -1,9 +1,9 @@
 package christmas.service;
 
-import christmas.entity.OrderStatement;
+import christmas.entity.DiscountDetail;
+import christmas.entity.Order;
 
 public interface PromotionService {
-    boolean support(OrderStatement orderStatement);
-    int discount(OrderStatement orderStatement);
-    String getName();
+    boolean support(Order order);
+    void apply(Order order, DiscountDetail discountDetail);
 }

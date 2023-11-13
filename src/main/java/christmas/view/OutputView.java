@@ -2,57 +2,59 @@ package christmas.view;
 
 import christmas.common.EventBadge;
 import christmas.common.Message;
+import christmas.entity.DiscountDetail;
 import christmas.entity.Dish;
-import christmas.entity.OrderStatement;
+import christmas.entity.Order;
 
 import static christmas.common.Message.*;
 
 public class OutputView {
 
-    public void printOrderDetails(OrderStatement order) {
+    public void printMenu(Order order) {
+        DiscountDetail discountDetail = order.getDetails();
         System.out.println(ORDER_DETAIL.getMessage(order.getReservationDay()));
         printOrderedDishes(order);
-        printMessage(ORDER_ORIGINAL_PRICE, priceFormat(order.getOriginalPrice()));
-        printPromotionItems(order);
-        printPromotionDetails(order);
-        printMessage(ORDER_TOTAL_DISCOUNT, priceFormat(-order.getDiscountPrice()));
+        printMessage(ORDER_ORIGINAL_PRICE, priceFormat(order.getTotalPrice()));
+        printPromotionItems(discountDetail);
+        printPromotionDetails(discountDetail);
+        printMessage(ORDER_TOTAL_DISCOUNT, priceFormat(-discountDetail.getTotalDiscount()));
         printMessage(ORDER_PURCHASE_PRICE, priceFormat(order.getPurchasePrice()));
-        printMessage(EVENT_BADGE, EventBadge.getBadge(order.getDiscountPrice()));
+        printMessage(EVENT_BADGE, EventBadge.getBadge(discountDetail.getTotalDiscount()));
     }
 
-    private void printOrderedDishes(OrderStatement order) {
+    private void printOrderedDishes(Order order) {
         StringBuilder detail = new StringBuilder(ORDER_DISHES.getMessage());
 
-        for (Dish dish : order.getOrderedDishes()) {
-            detail.append(dishFormat(dish, order.getNumber(dish)));
+        for (Dish dish : order.getDishes()) {
+            detail.append(dishFormat(dish, order.getDishNumber(dish)));
         }
         System.out.println(detail);
     }
 
-    private void printPromotionItems(OrderStatement order) {
-        if (order.getPromotionDishes().isEmpty()) {
+    private void printPromotionItems(DiscountDetail discountDetail) {
+        if (discountDetail.getGifts().isEmpty()) {
             printMessage(ORDER_PROMOTION_ITEM, EMPTY);
             return;
         }
-        StringBuilder detail = new StringBuilder(ORDER_PROMOTION_ITEM.getMessage());
+        StringBuilder message = new StringBuilder(ORDER_PROMOTION_ITEM.getMessage());
 
-        for (Dish dish : order.getPromotionDishes()) {
-            detail.append(dishFormat(dish, order.getNumberOfPromotion(dish)));
+        for (Dish gift : discountDetail.getGifts()) {
+            message.append(dishFormat(gift, discountDetail.getGiftNumber(gift)));
         }
-        System.out.println(detail);
+        System.out.println(message);
     }
 
-    private void printPromotionDetails(OrderStatement order) {
-        if (order.getPromotionDetails().isEmpty()) {
+    private void printPromotionDetails(DiscountDetail discountDetail) {
+        if (discountDetail.getDetails().isEmpty()) {
             printMessage(ORDER_PROMOTION_DETAIL, EMPTY);
             return;
         }
-        StringBuilder detail = new StringBuilder(ORDER_PROMOTION_DETAIL.getMessage());
+        StringBuilder message = new StringBuilder(ORDER_PROMOTION_DETAIL.getMessage());
 
-        for (String promotion : order.getPromotionDetails()) {
-            detail.append(detailFormat(promotion, -order.getPromotionPrice(promotion)));
+        for (String detail : discountDetail.getDetails()) {
+            message.append(detailFormat(detail, -discountDetail.getDiscount(detail)));
         }
-        System.out.println(detail);
+        System.out.println(message);
     }
 
     private void printMessage(Message message, String added) {

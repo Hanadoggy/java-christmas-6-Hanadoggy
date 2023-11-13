@@ -1,9 +1,10 @@
 package christmas.service;
 
 import christmas.common.Range;
+import christmas.entity.DiscountDetail;
 import christmas.entity.Dish;
 import christmas.entity.MainDish;
-import christmas.entity.OrderStatement;
+import christmas.entity.Order;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,12 +34,12 @@ public class WeekendPromotionService implements PromotionService {
     }
 
     @Override
-    public boolean support(OrderStatement orderStatement) {
-        if (!duration.contains(orderStatement.getReservationDay()) ||
-                orderStatement.getOriginalPrice() < Range.MIN_PRICE.getValue()) {
+    public boolean support(Order order) {
+        if (!duration.contains(order.getReservationDay()) ||
+                order.getTotalPrice() < Range.MIN_PRICE.getValue()) {
             return false;
         }
-        Set<Dish> orderedDishes = orderStatement.getOrderedDishes();
+        Set<Dish> orderedDishes = order.getDishes();
         for (Dish targetDish : targetDishes) {
             if (orderedDishes.contains(targetDish)) {
                 return true;
@@ -48,18 +49,14 @@ public class WeekendPromotionService implements PromotionService {
     }
 
     @Override
-    public int discount(OrderStatement orderStatement) {
+    public void apply(Order order, DiscountDetail discountDetail) {
         int basicDiscount = 2_023;
 
         int totalDiscount = 0;
         for (Dish targetDish : targetDishes) {
-            totalDiscount += orderStatement.getNumber(targetDish) * basicDiscount;
+            totalDiscount += order.getDishNumber(targetDish) * basicDiscount;
         }
-        return totalDiscount;
+        discountDetail.addDetail(promotionName, totalDiscount);
     }
 
-    @Override
-    public String getName() {
-        return promotionName;
-    }
 }

@@ -10,7 +10,7 @@ import static christmas.common.Message.*;
 
 public class OutputView {
 
-    public void printMenu(Order order) {
+    public static void printMenu(Order order) {
         DiscountDetail discountDetail = order.getDetails();
         System.out.println(ORDER_DETAIL.getMessage(order.getReservationDay()));
         printOrderedDishes(order);
@@ -22,7 +22,7 @@ public class OutputView {
         printMessage(EVENT_BADGE, EventBadge.getBadge(discountDetail.getTotalDiscount()));
     }
 
-    private void printOrderedDishes(Order order) {
+    private static void printOrderedDishes(Order order) {
         StringBuilder detail = new StringBuilder(ORDER_DISHES.getMessage());
 
         for (Dish dish : order.getDishes()) {
@@ -31,7 +31,7 @@ public class OutputView {
         System.out.println(detail);
     }
 
-    private void printPromotionItems(DiscountDetail discountDetail) {
+    private static void printPromotionItems(DiscountDetail discountDetail) {
         if (discountDetail.getGifts().isEmpty()) {
             printMessage(ORDER_PROMOTION_ITEM, EMPTY);
             return;
@@ -44,7 +44,7 @@ public class OutputView {
         System.out.println(message);
     }
 
-    private void printPromotionDetails(DiscountDetail discountDetail) {
+    private static void printPromotionDetails(DiscountDetail discountDetail) {
         if (discountDetail.getDetails().isEmpty()) {
             printMessage(ORDER_PROMOTION_DETAIL, EMPTY);
             return;
@@ -57,11 +57,11 @@ public class OutputView {
         System.out.println(message);
     }
 
-    private void printMessage(Message message, String added) {
+    private static void printMessage(Message message, String added) {
         System.out.println(message.getMessage() + added);
     }
 
-    private void printMessage(Message message1, Message message2) {
+    private static void printMessage(Message message1, Message message2) {
         printMessage(message1, message2.getMessage());
     }
 

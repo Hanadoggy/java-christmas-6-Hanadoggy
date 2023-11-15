@@ -11,29 +11,51 @@ import christmas.view.OutputView;
 import java.util.List;
 
 public class RestaurantController {
-    private final InputView inputView;
-    private final OutputView outputView;
     private final RestaurantService restaurantService;
 
     public RestaurantController(List<PromotionService> promotionsInProgress) {
-        inputView = new InputView();
-        outputView = new OutputView();
         restaurantService = new RestaurantService(promotionsInProgress);
     }
 
     public void acceptOrder() {
-        int reservationDate = inputView.readDate();
-        OrderDto orderDto = inputView.readOrder(reservationDate);
-        Order order = null;
-
-        while (order == null) {
+        int reservationDate = getReservationDate();
+        OrderDto orderDto = getOrderDto(reservationDate);
+        OutputView.printMenu(acceptOrder(reservationDate, orderDto));
+    }
+    
+    private int getReservationDate() {
+        Message message = Message.RESERVATION_DATE;
+        while (true) {
             try {
-                order = restaurantService.performOrder(orderDto);
+                return InputView.readDate(message);
             } catch (IllegalArgumentException e) {
-                orderDto = inputView.readOrder(reservationDate, Message.ERROR_INVALID_ORDER);
+                message = Message.ERROR_INVALID_DATE;
             }
         }
-        outputView.printMenu(restaurantService.performOrder(orderDto));
+    }
+
+    private OrderDto getOrderDto(int reservationDate, Message message) {
+        while (true) {
+            try {
+                return InputView.readOrder(reservationDate, message);
+            } catch (IllegalArgumentException e) {
+                message = Message.ERROR_INVALID_ORDER;
+            }
+        }
+    }
+    
+    private OrderDto getOrderDto(int reservationDate) {
+        return getOrderDto(reservationDate, Message.RESERVATION_ORDER);
+    }
+    
+    private Order acceptOrder(int reservationDate, OrderDto orderDto) {
+        while (true) {
+            try {
+                return restaurantService.performOrder(orderDto);
+            } catch (IllegalArgumentException e) {
+                orderDto = getOrderDto(reservationDate, Message.ERROR_INVALID_ORDER);
+            }
+        }   
     }
 
 }

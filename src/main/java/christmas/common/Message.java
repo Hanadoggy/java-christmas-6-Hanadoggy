@@ -42,7 +42,7 @@ public enum Message {
         return NumberFormat.getNumberInstance(Locale.US).format(price) + "원\n";
     }
 
-    public static String detailFormat(String promotion, int price) {
+    public static String promotionFormat(String promotion, int price) {
         return String.format("%s: %s", promotion, priceFormat(price));
     }
 

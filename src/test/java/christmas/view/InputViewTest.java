@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class InputViewTest {
+    final int VALID_DATE = 1;
 
     @AfterEach
     void setUpInput() {
@@ -30,9 +31,10 @@ class InputViewTest {
     @ParameterizedTest
     void 유효한_날짜_입력(String input) {
         setInput(input);
+        int result = Integer.parseInt(input);
 
         assertThat(InputView.readDate(Message.RESERVATION_DATE))
-                .isEqualTo(Integer.parseInt(input));
+                .isEqualTo(result);
     }
 
     @ValueSource(strings = {"-1","0","32","yujin","!@","  ","-","0a"})
@@ -48,13 +50,15 @@ class InputViewTest {
     void 유효한_주문_입력() {
         // given
         setInput("바비큐립-1,샴페인-1");
+        int numberOfBBQ = 1;
+        int numberOfChampagne = 1;
 
         // when
-        OrderDto orderDto = InputView.readOrder(1, Message.RESERVATION_ORDER);
+        OrderDto orderDto = InputView.readOrder(VALID_DATE, Message.RESERVATION_ORDER);
 
         // then
-        assertThat(orderDto.getNumber(MainDish.BBQ_RIBS.getName())).isEqualTo(1);
-        assertThat(orderDto.getNumber(Beverage.CHAMPAGNE.getName())).isEqualTo(1);
+        assertThat(orderDto.getNumber(MainDish.BBQ_RIBS.getName())).isEqualTo(numberOfBBQ);
+        assertThat(orderDto.getNumber(Beverage.CHAMPAGNE.getName())).isEqualTo(numberOfChampagne);
     }
 
     @ValueSource(strings = {
@@ -69,7 +73,7 @@ class InputViewTest {
     void 양식에_맞지않는_주문_입력(String input) {
         setInput(input);
 
-        assertThatThrownBy(() -> InputView.readOrder(1, Message.RESERVATION_ORDER))
+        assertThatThrownBy(() -> InputView.readOrder(VALID_DATE, Message.RESERVATION_ORDER))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

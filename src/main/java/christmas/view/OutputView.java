@@ -52,7 +52,7 @@ public class OutputView {
         StringBuilder message = new StringBuilder(ORDER_PROMOTION_DETAIL.getMessage());
 
         for (String detail : discountDetail.getDetails()) {
-            message.append(detailFormat(detail, -discountDetail.getDiscount(detail)));
+            message.append(promotionFormat(detail, -discountDetail.getDiscount(detail)));
         }
         System.out.println(message);
     }

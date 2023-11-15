@@ -1,12 +1,13 @@
 package christmas;
 
-import christmas.service.RestaurantStarter;
+import christmas.common.AppConfig;
+import christmas.controller.RestaurantController;
 
 public class Application {
 
     public static void main(String[] args) {
-        RestaurantStarter restaurantStarter = new RestaurantStarter();
-        restaurantStarter.run();
+        RestaurantController restaurantController = AppConfig.getRestaurantController();
+        restaurantController.acceptOrder();
     }
 
 }

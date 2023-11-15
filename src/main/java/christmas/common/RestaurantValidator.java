@@ -11,12 +11,12 @@ public class RestaurantValidator {
     }
 
     public static void checkDishNumber(OrderDto orderDto) {
-        int totalDishes = 0;
-        int maxDishes = Range.MAX_MENU.getValue();
+        int sumMenu = 0;
+        int maxMenu = Range.MAX_MENU.getValue();
 
         for (String dishName : orderDto.getOrders()) {
-            totalDishes += orderDto.getNumber(dishName);
-            if (totalDishes > maxDishes) {
+            sumMenu += orderDto.getNumber(dishName);
+            if (sumMenu > maxMenu) {
                 throw new IllegalArgumentException();
             }
         }

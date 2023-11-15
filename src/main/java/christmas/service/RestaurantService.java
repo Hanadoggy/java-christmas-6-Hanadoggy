@@ -15,9 +15,9 @@ public class RestaurantService {
     private final List<PromotionService> promotionsInProgress;
     private final RestaurantRepository restaurantRepository;
 
-    public RestaurantService(List<PromotionService> promotionsInProgress) {
-        this.promotionsInProgress = promotionsInProgress;
-        restaurantRepository = new RestaurantRepository();
+    public RestaurantService(List<PromotionService> promotions, RestaurantRepository repository) {
+        this.promotionsInProgress = promotions;
+        this.restaurantRepository = repository;
     }
 
     public Order performOrder(OrderDto orderDto) {
@@ -44,14 +44,14 @@ public class RestaurantService {
     }
 
     private void checkMinimumDish(Order order) {
-        Set<Dish> dishes = order.getDishes();
+        Set<Dish> unessentialDishes = restaurantRepository.findUnessentialDishes();
 
-        for (Dish dish : restaurantRepository.findUnessentialDishes()) {
-            dishes.remove(dish);
+        for (Dish dish : order.getDishes()) {
+            if (!unessentialDishes.contains(dish)) {
+                return;
+            }
         }
-        if (dishes.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
+        throw new IllegalArgumentException();
     }
 
 }

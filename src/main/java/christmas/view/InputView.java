@@ -5,6 +5,9 @@ import christmas.common.Message;
 import christmas.common.RestaurantValidator;
 import christmas.dto.OrderDto;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class InputView {
 
     public static int readDate(Message message) {
@@ -21,13 +24,12 @@ public class InputView {
 
     private static OrderDto createOrderDto(int reservationDate, String input) {
         try {
-            OrderDto newOrder = new OrderDto(reservationDate);
+            Map<String, Integer> menu = new HashMap<>();
             for (String dish : input.split(",")) {
                 String[] dishAndCount = dish.split("-", 2);
-                newOrder.addOrder(dishAndCount[0], convertInteger(dishAndCount[1]));
+                menu.put(dishAndCount[0], menu.getOrDefault(dish, 0) + convertInteger(dishAndCount[1]));
             }
-            RestaurantValidator.checkDishNumber(newOrder);
-            return newOrder;
+            return new OrderDto(reservationDate, menu);
         } catch (NullPointerException | IndexOutOfBoundsException e) {
             throw new IllegalArgumentException(e);
         }

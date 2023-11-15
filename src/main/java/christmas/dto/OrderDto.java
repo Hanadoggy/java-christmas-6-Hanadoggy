@@ -1,29 +1,27 @@
 package christmas.dto;
 
-import java.util.HashMap;
+import christmas.common.RestaurantValidator;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class OrderDto {
     private final int reservationDate;
-    private final Map<String, Integer> dishes;
+    private final Map<String, Integer> menu;
 
-    public OrderDto(int reservationDate) {
+    public OrderDto(int reservationDate, Map<String, Integer> menu) {
         this.reservationDate = reservationDate;
-        dishes = new HashMap<>();
-    }
-
-    public void addOrder(String dish, int number) {
-        dishes.put(dish, dishes.getOrDefault(dish, 0) + number);
+        this.menu = menu;
+        RestaurantValidator.checkDishNumber(this);
     }
 
     public Set<String> getOrders() {
-        return new HashSet<>(Set.copyOf(dishes.keySet()));
+        return new HashSet<>(Set.copyOf(menu.keySet()));
     }
 
     public int getNumber(String dishName) {
-        return dishes.getOrDefault(dishName, 0);
+        return menu.getOrDefault(dishName, 0);
     }
 
     public int getReservationDate() {
